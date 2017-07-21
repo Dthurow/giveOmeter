@@ -1,0 +1,39 @@
+Have multiple "climber" characters with their own score and name. Once that is set in the code, start the game. 
+
+---------------------
+Example start:
+
+python ./main.py
+
+---------------------
+
+Once it's started, use the left and right arrow to focus on a character, use up and down to increment or decrement that climber's score, then press enter to update the location of the climbers. 
+
+Once one climber hits the winning score, The winners name appears on the screen in big letters.
+
+
+---------------------
+
+BASIC CODE SET UP
+
+main.py -- shockingly, main file with main game loop
+eventHandling.py -- reads input from wherever, returns list of events that have happened since it was last called
+display.py -- code to display the climber, aka sprites, current score, climber names
+GlobalConstants.py -- what it says on the tin
+CharacterClasses.py -- The main classes for the game: Climber, Counter, GameState
+SpriteImages Folder -- Where the sprites are stored
+
+
+---------------------
+
+PLANNED UPDATES (in no particular order)
+
+With the eventHandling abstracted out, it can potentially be updated to use a more interesting input, such as a joystick/button combo.
+
+Add animation for the climber sprites when they move
+
+Add background image to the game
+
+Abstract out settings for an individual game into a separate file, have the code read in the settings before starting (e.g. change start to "python ./main.py setting.config")
+
+Add background music
