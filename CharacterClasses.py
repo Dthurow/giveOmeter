@@ -3,6 +3,7 @@ from pygame.locals import *
 import GlobalConstants
 from GlobalConstants import *
 import os
+import json
 
 
 class Climber(pygame.sprite.Sprite):
@@ -12,6 +13,7 @@ class Climber(pygame.sprite.Sprite):
 		pygame.sprite.Sprite.__init__(self)
 		self.Name = name
 		#load in image
+		self.FileName = fileName
 		self.ImageList = []
 		for dirname, dirnames, filenames in os.walk('SpriteImages/' + fileName):
 			for file in filenames:
@@ -23,7 +25,7 @@ class Climber(pygame.sprite.Sprite):
 		self.rect = self.image.get_rect()
 		self.rect.x = startX
 		self.rect.y = startY
-		self.Score = Counter(startCount, startCounterX, startCounterY)
+		self.Score = Counter(startCount, startCounterX, startCounterY, self.Name)
 		print "loaded a climber"
 
 	def UpdateY(self, newY):
@@ -37,15 +39,22 @@ class Climber(pygame.sprite.Sprite):
 
 
 
-class Counter():
+class Counter(pygame.sprite.Sprite):
 	
 
-	def __init__(self, startCount, startX, startY):
+	def __init__(self, startCount, startX, startY, displayName):
+		# Call the sprite initialiser
+		pygame.sprite.Sprite.__init__(self)
+		self.MyFont = pygame.font.SysFont(None, 56)
 		self.CurCount = startCount
 		self.PrevCount = startCount
 		self.HasChanged = False
-		self.X = startX
-		self.Y = startY
+		self.IsFocused = False
+		self.image = self.MyFont.render(str(startCount), 1, BLACK)
+		self.rect = self.image.get_rect()
+		self.rect.x = startX
+		self.rect.y = startY
+		self.DisplayName = displayName
 		print "loaded a counter"
 
 	def increaseCount(self, newCount):
@@ -64,29 +73,51 @@ class Counter():
 		self.PrevCount = self.CurCount
 		return returnVal
 
+	def update(self, *args):
+		if self.IsFocused:
+			self.image = self.MyFont.render(self.DisplayName + ": " + str(self.CurCount), 1, GREEN)
+		else:
+			self.image = self.MyFont.render(self.DisplayName + ": " + str(self.CurCount), 1, WHITE)
+
 
 
 class GameState:
-	WinningScore = 1000
+	WinningScore = 5000
 
-	def __init__(self):
+	def __init__(self, fileName):
 		self.CurFocus = 0
 
-		climberSpace = SCREEN_WIDTH / 3
 
-		self.ClimberList = [Climber("Team SPIE", "SPIEImages", 0, 100, SCREEN_HEIGHT-GAMEBORDER_BOTTOM, 100, SCREEN_HEIGHT-(GAMEBORDER_BOTTOM/2)), Climber("Team ERS", "Flying", 0, 100 + climberSpace,  SCREEN_HEIGHT-GAMEBORDER_BOTTOM, 100 + climberSpace,  SCREEN_HEIGHT-(GAMEBORDER_BOTTOM/2)), Climber("Team Kool Kidz", "Flying", 0, 100 + climberSpace * 2,  SCREEN_HEIGHT-GAMEBORDER_BOTTOM, 100 + climberSpace * 2,  SCREEN_HEIGHT-(GAMEBORDER_BOTTOM/2))]
+		f = open(fileName, 'r')
+		fileJson = json.load(f)		
+
+		self.WinningScore = fileJson['WinningScore']
+
+
 		self.ClimberGroup = pygame.sprite.Group()
-		self.ClimberGroup.add(self.ClimberList)
+		self.ClimberList = []
+		self.CounterGroup = pygame.sprite.Group()
+
+		for climberJSON in fileJson['Climbers']:
+			newClimber = Climber(climberJSON[0], climberJSON[1], climberJSON[2], climberJSON[3], climberJSON[4], climberJSON[5], climberJSON[6] )
+			self.ClimberList.append(newClimber)
+			self.ClimberGroup.add(newClimber)
+			self.CounterGroup.add(newClimber.Score)
+		
+					
+
 		self.UpdateDisplay = False
 		self.UpdateClimbers = False
 		self.IsFinished = False
 		self.WinnersName = ""
 		self.DirtySprites = pygame.sprite.Group()
+
 		print "loaded game state"
 
+	def saveToFile(self, fileName):
+		fileJson = {'WinningScore': self.WinningScore, 'Climbers': []  }
 
+		for climber in self.ClimberList:
+			fileJson['Climbers'].append((climber.Name, climber.FileName, climber.Score.CurCount, climber.rect.x, climber.rect.y, climber.Score.rect.x, climber.Score.rect.y ))
 
-#testing stuff
-
-#test = GameState()
-#print test.UpdateClimbers
+		json.dump(fileJson, open(fileName, 'w'))

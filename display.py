@@ -5,7 +5,7 @@ from GlobalConstants import *
 
 
 
-FPS = 16 # frames per second setting
+FPS = 12 # frames per second setting
 
 
 class GiveDisplay:
@@ -19,11 +19,14 @@ class GiveDisplay:
 		self.fpsClock = pygame.time.Clock()
 		self.SCREEN.fill(BLUE)
 		self.MyFont = pygame.font.SysFont(None, 56)
+		curGameState.ClimberList[curGameState.CurFocus].Score.IsFocused = True
 
-		for climber in curGameState.ClimberList:
-			counterText = self.MyFont.render(str(climber.Score.CurCount), 1, BLACK)
-			self.SCREEN.blit(counterText, (climber.Score.X, climber.Score.Y))
+		curGameState.CounterGroup.update()
+		curGameState.CounterGroup.clear(self.SCREEN, self.BACKGROUND)
+		curGameState.CounterGroup.draw(self.SCREEN)
 
+		
+		pygame.display.update()
 		print "initialized display"
 
 	def updateScreen(self, curGameState):
@@ -39,22 +42,17 @@ class GiveDisplay:
 				print "add to y: " + str(heightChange)
 				self.moveClimberUp(heightChange, climber, curGameState)
 
-		print "called update"	
+
 		curGameState.ClimberGroup.update()
 		curGameState.ClimberGroup.clear(self.SCREEN, self.BACKGROUND)
 		curGameState.ClimberGroup.draw(self.SCREEN)
 
 		#update the scores and the focus
-		for climber in curGameState.ClimberList:
-			textColor = WHITE
-			if (climber.Name == curGameState.ClimberList[curGameState.CurFocus].Name):
-				textColor = GREEN
+		
+		curGameState.CounterGroup.update()
+		curGameState.CounterGroup.clear(self.SCREEN, self.BACKGROUND)
+		curGameState.CounterGroup.draw(self.SCREEN)
 
-			counterText = self.MyFont.render(str(climber.Score.CurCount), 1, textColor)
-			climberName = self.MyFont.render(str(climber.Name), 1, textColor)
-			self.SCREEN.blit(counterText, (climber.Score.X, climber.Score.Y))
-			self.SCREEN.blit(climberName, (climber.Score.X - 15, climber.Score.Y + 32))
-					
 
 
 		#check for win condition
@@ -84,20 +82,14 @@ class GiveDisplay:
 			curGameState.ClimberGroup.clear(self.SCREEN, self.BACKGROUND)
 			curGameState.ClimberGroup.draw(self.SCREEN)
 
+			
 			#update the scores and the focus
-			#for climber in curGameState.ClimberList:
-			#	textColor = WHITE
-			#	if (climber.Name == curGameState.ClimberList[curGameState.CurFocus].Name):
-			#		textColor = GREEN
-
-			#	counterText = self.MyFont.render(str(climber.Score.CurCount), 1, textColor)
-			#	climberName = self.MyFont.render(str(climber.Name), 1, textColor)
-			#	self.SCREEN.blit(counterText, (climber.Score.X, climber.Score.Y))
-			#	self.SCREEN.blit(climberName, (climber.Score.X - 15, climber.Score.Y + 32))
-					
+			
+			curGameState.CounterGroup.update()
+			curGameState.CounterGroup.clear(self.SCREEN, self.BACKGROUND)
+			curGameState.CounterGroup.draw(self.SCREEN)
 
 
-
-			pygame.display.update(curGameState.ClimberGroup.sprites())
+			pygame.display.update()
 			print "heightChange is at: " + str(heightChange)
 			self.fpsClock.tick(FPS)

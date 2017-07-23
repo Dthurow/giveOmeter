@@ -28,6 +28,8 @@ class EventHandling:
 					returnList.append(Actions.UpdateCharacters)
 				if event.key == K_ESCAPE:
 					returnList.append(Actions.Quit)
+				if event.key == K_s:
+					returnList.append(Actions.SaveGame)
 
 		return returnList
 

@@ -8,7 +8,7 @@ import display
 from display import *
 import CharacterClasses
 from CharacterClasses import *
-
+import datetime
 
 
 
@@ -20,8 +20,11 @@ def main():
 	curEvents = []
 
 	eventHandler = EventHandling()
-	
-	myGame = GameState()
+	savedFileName = 'baseSettings'
+	if (len(sys.argv) > 1):
+		savedFileName = sys.argv[1]
+
+	myGame = GameState(savedFileName)
 	mydisplay = GiveDisplay(myGame)
 
 	while True: # main game loop
@@ -62,14 +65,20 @@ def main():
 					print myGame.ClimberList[myGame.CurFocus].Name + " now has " + str(myGame.ClimberList[myGame.CurFocus].Score.CurCount)
 
 				if event == Actions.MoveFocusLeft:
+					myGame.ClimberList[myGame.CurFocus].Score.IsFocused = False
 					myGame.CurFocus = (myGame.CurFocus - 1) % len(myGame.ClimberList)
 					myGame.UpdateDisplay = True
+					myGame.ClimberList[myGame.CurFocus].Score.IsFocused = True
 					print "focus now on " + myGame.ClimberList[myGame.CurFocus].Name
 
 				if event == Actions.MoveFocusRight:
+					myGame.ClimberList[myGame.CurFocus].Score.IsFocused = False
 					myGame.CurFocus = (myGame.CurFocus + 1) % len(myGame.ClimberList)
 					myGame.UpdateDisplay = True
+					myGame.ClimberList[myGame.CurFocus].Score.IsFocused = True
 					print "focus now on " + myGame.ClimberList[myGame.CurFocus].Name
+				if event == Actions.SaveGame:
+					myGame.saveToFile('SavedFile' + str(datetime.datetime.now().time()))
 
 				
 			

@@ -22,6 +22,9 @@ display.py -- code to display the climber, aka sprites, current score, climber n
 GlobalConstants.py -- what it says on the tin
 CharacterClasses.py -- The main classes for the game: Climber, Counter, GameState
 SpriteImages Folder -- Where the sprites are stored
+BaseSettings -- where the basic settings for the game are stored, in JSON format. Format is (replace [DESCRIPTION HERE] with real values, see the file for an example):
+
+{"WinningScore": [SCORE TO WIN THE GAME], "Climbers": [["[NAME OF TEAM]", "[FOLDER CONTAINING SPRITES]]", [START SCORE], [START X POSITION], [START Y POSITION], [START X FOR SCORE TEXT], [START Y FOR SCORE TEXT]], [MORE CLIMBERS GO HERE IN SAME FORMAT AS FIRST] ]}
 
 
 ---------------------
@@ -30,10 +33,10 @@ PLANNED UPDATES (in no particular order)
 
 With the eventHandling abstracted out, it can potentially be updated to use a more interesting input, such as a joystick/button combo.
 
-Add animation for the climber sprites when they move
+Add animation for the climber sprites when they move (/) THIS IS COMPLETE Instead of setting the exact image to load, pass in the folder name under SpriteImages folder that stores the images for the animation. The game will cycle through these on each update.
 
 Add background image to the game
 
-Abstract out settings for an individual game into a separate file, have the code read in the settings before starting (e.g. change start to "python ./main.py setting.config")
+Abstract out settings for an individual game into a separate file, have the code read in the settings before starting (e.g. change start to "python ./main.py setting.config") (/) THIS IS COMPLETE. now it loads the gamestate from the file baseSettings, and any time while the game is running, you can click on the 'S' key to save a JSON file in the directory you started the game in, with the file format 'SavedFile[time]'
 
 Add background music

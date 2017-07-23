@@ -20,3 +20,4 @@ class Actions:
 	MoveFocusRight = 5
 	UpdateCharacters = 6 
 	RestartGame = 7
+	SaveGame = 8
