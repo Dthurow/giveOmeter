@@ -2,6 +2,7 @@ import pygame, sys
 from pygame.locals import *
 import GlobalConstants
 from GlobalConstants import *
+import os
 
 
 class Climber(pygame.sprite.Sprite):
@@ -11,7 +12,14 @@ class Climber(pygame.sprite.Sprite):
 		pygame.sprite.Sprite.__init__(self)
 		self.Name = name
 		#load in image
-		self.image = pygame.image.load('SpriteImages/' + fileName)
+		self.ImageList = []
+		for dirname, dirnames, filenames in os.walk('SpriteImages/' + fileName):
+			for file in filenames:
+				print "Loading " + file
+				self.ImageList.append(pygame.image.load('SpriteImages/' + fileName + '/' + file))
+
+		self.CurImage = 0
+		self.image = self.ImageList[self.CurImage]
 		self.rect = self.image.get_rect()
 		self.rect.x = startX
 		self.rect.y = startY
@@ -21,6 +29,11 @@ class Climber(pygame.sprite.Sprite):
 	def UpdateY(self, newY):
 		self.rect.y = newY
 		print "updated rect y to: " + str(newY)
+		self.update()
+
+	def update(self, *args):
+		self.CurImage = (self.CurImage + 1) % len(self.ImageList)
+		self.image = self.ImageList[self.CurImage]
 
 
 
@@ -61,7 +74,7 @@ class GameState:
 
 		climberSpace = SCREEN_WIDTH / 3
 
-		self.ClimberList = [Climber("Team SPIE", "cat.png", 0, 100, SCREEN_HEIGHT-GAMEBORDER_BOTTOM, 100, SCREEN_HEIGHT-(GAMEBORDER_BOTTOM/2)), Climber("Team ERS", "cat.png", 0, 100 + climberSpace,  SCREEN_HEIGHT-GAMEBORDER_BOTTOM, 100 + climberSpace,  SCREEN_HEIGHT-(GAMEBORDER_BOTTOM/2)), Climber("Team Kool Kidz", "cat.png", 0, 100 + climberSpace * 2,  SCREEN_HEIGHT-GAMEBORDER_BOTTOM, 100 + climberSpace * 2,  SCREEN_HEIGHT-(GAMEBORDER_BOTTOM/2))]
+		self.ClimberList = [Climber("Team SPIE", "SPIEImages", 0, 100, SCREEN_HEIGHT-GAMEBORDER_BOTTOM, 100, SCREEN_HEIGHT-(GAMEBORDER_BOTTOM/2)), Climber("Team ERS", "Flying", 0, 100 + climberSpace,  SCREEN_HEIGHT-GAMEBORDER_BOTTOM, 100 + climberSpace,  SCREEN_HEIGHT-(GAMEBORDER_BOTTOM/2)), Climber("Team Kool Kidz", "Flying", 0, 100 + climberSpace * 2,  SCREEN_HEIGHT-GAMEBORDER_BOTTOM, 100 + climberSpace * 2,  SCREEN_HEIGHT-(GAMEBORDER_BOTTOM/2))]
 		self.ClimberGroup = pygame.sprite.Group()
 		self.ClimberGroup.add(self.ClimberList)
 		self.UpdateDisplay = False
