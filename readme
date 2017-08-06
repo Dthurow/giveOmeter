@@ -1,16 +1,24 @@
-Have multiple "climber" characters with their own score and name. Once that is set in the code, start the game. 
+Have multiple characters with their own score and name. Each character is animated, and will move across the screen as they get a higher score. Once someone hits the winners name appears on the screen in big letters.
+
 
 ---------------------
 Example start:
 
 python ./main.py
 
+If you have a custom config setting, start with:
+
+python ./main.py customConfigNameHere
+
 ---------------------
 
-Once it's started, use the left and right arrow to focus on a character, use up and down to increment or decrement that climber's score, then press enter to update the location of the climbers. 
+Once it's started, use the up and down arrow to focus on a character, use left and right to increment or decrement that climber's score, then press enter to update the location of the climbers. 
 
-Once one climber hits the winning score, The winners name appears on the screen in big letters.
+Once one climber hits the winning score, The winners name appears on the screen in big letters. You can now only press ESC to exit the game, other keys are disabled.
 
+To save the current state of the game, press 'S' key at any given time, and it'll save it in the folder the game was started in. Filename will be SavedFile[Time Saved]. E.g. SavedFile10:46:17.713941
+
+To exit the game, either close the window, or press the ESC key.
 
 ---------------------
 
@@ -24,8 +32,11 @@ CharacterClasses.py -- The main classes for the game: Climber, Counter, GameStat
 SpriteImages Folder -- Where the sprites are stored
 BaseSettings -- where the basic settings for the game are stored, in JSON format. Format is (replace [DESCRIPTION HERE] with real values, see the file for an example):
 
-{"WinningScore": [SCORE TO WIN THE GAME], "Climbers": [["[NAME OF TEAM]", "[FOLDER CONTAINING SPRITES]]", [START SCORE], [START X POSITION], [START Y POSITION], [START X FOR SCORE TEXT], [START Y FOR SCORE TEXT]], [MORE CLIMBERS GO HERE IN SAME FORMAT AS FIRST] ]}
+{"WinningScore": [SCORE TO WIN THE GAME], "Climbers": [["[NAME OF TEAM]", "[FOLDER CONTAINING SPRITES]]", [START SCORE]], [MORE CLIMBERS GO HERE IN SAME FORMAT AS FIRST] ]}
 
+See the baseSettings file to see an example of this.
+
+The initial location of each climber is calculated based on the global constants: TEXT_HEIGHT, SPRITE_HEIGHT, GAMEBORDER_LEFT
 
 ---------------------
 
@@ -33,10 +44,7 @@ PLANNED UPDATES (in no particular order)
 
 With the eventHandling abstracted out, it can potentially be updated to use a more interesting input, such as a joystick/button combo.
 
-Add animation for the climber sprites when they move (/) THIS IS COMPLETE Instead of setting the exact image to load, pass in the folder name under SpriteImages folder that stores the images for the animation. The game will cycle through these on each update.
 
 Add background image to the game
-
-Abstract out settings for an individual game into a separate file, have the code read in the settings before starting (e.g. change start to "python ./main.py setting.config") (/) THIS IS COMPLETE. now it loads the gamestate from the file baseSettings, and any time while the game is running, you can click on the 'S' key to save a JSON file in the directory you started the game in, with the file format 'SavedFile[time]'
 
 Add background music
