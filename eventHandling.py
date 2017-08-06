@@ -16,13 +16,13 @@ class EventHandling:
 			if event.type == QUIT:
 				returnList.append(Actions.Quit)
 			if event.type == KEYDOWN:
-				if event.key == K_RIGHT:
-					returnList.append(Actions.MoveFocusRight)
-				if event.key == K_LEFT:
-					returnList.append(Actions.MoveFocusLeft)
-				if event.key == K_UP:
-					returnList.append(Actions.IncreasePoints)
 				if event.key == K_DOWN:
+					returnList.append(Actions.MoveFocusRight)
+				if event.key == K_UP:
+					returnList.append(Actions.MoveFocusLeft)
+				if event.key == K_RIGHT:
+					returnList.append(Actions.IncreasePoints)
+				if event.key == K_LEFT:
 					returnList.append(Actions.DecreasePoints)
 				if event.key == K_RETURN:
 					returnList.append(Actions.UpdateCharacters)

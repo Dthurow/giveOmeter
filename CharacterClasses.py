@@ -33,6 +33,11 @@ class Climber(pygame.sprite.Sprite):
 		print "updated rect y to: " + str(newY)
 		self.update()
 
+	def UpdateX(self, newX):
+		self.rect.x = newX
+		print "updated rect x to: " + str(newX)
+		self.update()
+
 	def update(self, *args):
 		self.CurImage = (self.CurImage + 1) % len(self.ImageList)
 		self.image = self.ImageList[self.CurImage]
@@ -98,8 +103,14 @@ class GameState:
 		self.ClimberList = []
 		self.CounterGroup = pygame.sprite.Group()
 
+		prevClimberTextY = - SPRITE_HEIGHT
+
 		for climberJSON in fileJson['Climbers']:
-			newClimber = Climber(climberJSON[0], climberJSON[1], climberJSON[2], climberJSON[3], climberJSON[4], climberJSON[5], climberJSON[6] )
+			curTextY = prevClimberTextY + TEXT_HEIGHT + SPRITE_HEIGHT
+			curClimberY = curTextY + TEXT_HEIGHT
+			prevClimberTextY = curTextY
+
+			newClimber = Climber(climberJSON[0], climberJSON[1], climberJSON[2], GAMEBORDER_LEFT, curClimberY, GAMEBORDER_LEFT, curTextY)
 			self.ClimberList.append(newClimber)
 			self.ClimberGroup.add(newClimber)
 			self.CounterGroup.add(newClimber.Score)

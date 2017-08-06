@@ -37,10 +37,10 @@ class GiveDisplay:
 		if (curGameState.UpdateClimbers):
 			for climber in curGameState.DirtySprites:
 				pointChange = climber.Score.getChange()
-				print "height: " + str(SCREEN_HEIGHT) + " winning score " + str(curGameState.WinningScore) + " point change " + str(pointChange)
-				heightChange =  (float(SCREEN_HEIGHT- (GAMEBORDER_BOTTOM + GAMEBORDER_TOP)) / curGameState.WinningScore) * pointChange
-				print "add to y: " + str(heightChange)
-				self.moveClimberUp(heightChange, climber, curGameState)
+				#print "height: " + str(SCREEN_HEIGHT) + " winning score " + str(curGameState.WinningScore) + " point change " + str(pointChange)
+				leftChange =  (float(SCREEN_WIDTH - (GAMEBORDER_BOTTOM + GAMEBORDER_TOP)) / curGameState.WinningScore) * pointChange
+				print "add to x: " + str(leftChange)
+				self.moveClimberRight(leftChange, climber, curGameState)
 
 
 		curGameState.ClimberGroup.update()
@@ -92,4 +92,32 @@ class GiveDisplay:
 
 			pygame.display.update()
 			print "heightChange is at: " + str(heightChange)
+			self.fpsClock.tick(FPS)
+
+	def moveClimberRight(self, leftChange, climber, curGameState):
+		speedChange = 10
+
+		while (leftChange > 0):
+			
+			if (leftChange >= speedChange):
+				climber.UpdateX(climber.rect.x + speedChange)
+				leftChange -= speedChange
+			else:
+				climber.UpdateX(climber.rect.x + leftChange)
+				leftChange = 0
+
+			curGameState.ClimberGroup.update()
+			curGameState.ClimberGroup.clear(self.SCREEN, self.BACKGROUND)
+			curGameState.ClimberGroup.draw(self.SCREEN)
+
+			
+			#update the scores and the focus
+			
+			curGameState.CounterGroup.update()
+			curGameState.CounterGroup.clear(self.SCREEN, self.BACKGROUND)
+			curGameState.CounterGroup.draw(self.SCREEN)
+
+
+			pygame.display.update()
+			print "leftChange is at: " + str(leftChange)
 			self.fpsClock.tick(FPS)
