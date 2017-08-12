@@ -50,7 +50,7 @@ class Counter(pygame.sprite.Sprite):
 	def __init__(self, startCount, startX, startY, displayName):
 		# Call the sprite initialiser
 		pygame.sprite.Sprite.__init__(self)
-		self.MyFont = pygame.font.SysFont(None, 56)
+		self.MyFont = pygame.font.SysFont(None, FONT_SIZE)
 		self.CurCount = startCount
 		self.PrevCount = startCount
 		self.HasChanged = False

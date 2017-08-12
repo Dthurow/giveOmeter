@@ -12,13 +12,17 @@ class GiveDisplay:
 
 
 	def __init__(self, curGameState):
-		self.SCREEN = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+		self.SCREEN = pygame.display.set_mode((0,0), pygame.FULLSCREEN)
+
+		SCREEN_HEIGHT = self.SCREEN.get_height()
+		SCREEN_WIDTH = self.SCREEN.get_width()	
+
 		self.BACKGROUND = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
 		self.BACKGROUND.fill(BLUE)
-		pygame.display.set_caption('Give-O-Meter')
+		#pygame.display.set_caption('Give-O-Meter')
 		self.fpsClock = pygame.time.Clock()
 		self.SCREEN.fill(BLUE)
-		self.MyFont = pygame.font.SysFont(None, 56)
+		self.MyFont = pygame.font.SysFont(None, FONT_SIZE)
 		curGameState.ClimberList[curGameState.CurFocus].Score.IsFocused = True
 
 		curGameState.CounterGroup.update()
